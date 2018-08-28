@@ -3,46 +3,44 @@ import re
 from tkinter import *
 
 
-command = "pdftotext -table raw_pdf.pdf"
+command = "pdftotext -table raw_pdf2.pdf"
 os.system(command)
 
-class Window(Frame):
+
 	
-	def __init__(self, master = None):
-		Frame.__init__(self, master)
-		self.master = master
-		self.init_window()
-	
-	def init_window(self):
-		
-		self.master.title("Schedule Helper")
-		
-		self.pack(fill = BOTH, expand = 1)
-		
-		goButton = Button(self, text = "Go", command = self.client_go)
-		
-		goButton.place(x = 0, y = 0)
-		
-	def client_go(self):
+def client_go():
 		root.destroy()
+		
+def submit():
+		submit.subject = entrySubject.get()
+		submit.classNum = entryClass.get()
+		client_go()
 
-
-	
+		
 root = Tk()
-root.geometry("500x300")
-app = Window(root)
+root.title("Schedule Helper")
+		
+Label(text = "Subject Abreviation:  (ex: MATH, CSCE)").grid(row = 0)
+Label(text = "Class Number:  (ex: 151, 304)").grid(row = 1, sticky = W)
+
+entrySubject = Entry(root, width = 8)
+entryClass = Entry(root, width = 8)
+
+entrySubject.grid(row = 0, column = 1)
+entryClass.grid(row = 1, column = 1)
+		
+Button(root, text = "Submit", command = submit).grid(row = 2, column = 1)
+
+root.geometry("400x300")
 root.mainloop()
 
 
 
-
-subject = "STLC"
-
-pattern = r"^" + subject + "-([-\d])"
+pattern = r"^" + submit.subject + "-" + submit.classNum + "-" + "([-\d])"
 
 regexObject = re.compile(pattern)
 
-pdf = open("test_pdf.txt", "r")
+pdf = open("raw_pdf2.txt", "r")
 
 for line in pdf:
 	if re.match(pattern, line):
